@@ -31,9 +31,9 @@ namespace kassasysteem
             {
                 int c = url.IndexOf("?code=");
                 int s = url.IndexOf("&state=");
-                //OAuth.Code = url.Substring(c + 6, s - c - 6);
-                //OAuth.State = url.Substring(s + 7);
-                //Frame.Navigate(typeof(GLAList), 0);
+                OAuth.Code = url.Substring(c + 6, s - c - 6);
+                OAuth.State = url.Substring(s + 7);
+                Frame.Navigate(typeof(Dashboard), 0);
             }
         }
 
