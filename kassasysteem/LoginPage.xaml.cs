@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using kassasysteem.Classes;
@@ -7,6 +8,7 @@ namespace kassasysteem
 {
     public sealed partial class MainPage : Page
     {
+
         public MainPage()
         {
             InitializeComponent();
@@ -56,11 +58,6 @@ namespace kassasysteem
                 await wb.InvokeScriptAsync("eval", new string[] { script });
             }
             catch { }
-        }
-
-        private void WebView_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
-        {
-            GetCode(args.Uri.ToString());
         }
     }
 }

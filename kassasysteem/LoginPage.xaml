@@ -13,7 +13,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Inloggen" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-        <WebView Grid.Row="1" x:Name="webBrowser" NavigationCompleted="WebView_NavigationCompleted" NavigationStarting="WebView_NavigationStarting" />
+        <WebView Grid.Row="1" x:Name="webBrowser" NavigationCompleted="WebView_NavigationCompleted" />
     </Grid>
 </Page>
 
