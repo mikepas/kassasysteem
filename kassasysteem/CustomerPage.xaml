@@ -5,9 +5,32 @@
     xmlns:local="using:kassasysteem"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d" FontSize="18">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="#FF8BB95C" BorderThickness="0,0,0,1" BorderBrush="Black">
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Groene Vingers</TextBlock>
+        </Border>
+        
+        <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Artikel</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Aantal</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Prijs</TextBlock>
+
+        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,1" BorderBrush="Black"></ListView>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0">Totaal:</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20,0">$25,00</TextBlock>
     </Grid>
 </Page>
