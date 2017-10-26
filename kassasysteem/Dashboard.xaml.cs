@@ -5,6 +5,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using kassasysteem.Classes;
 
 namespace kassasysteem
 {
@@ -16,6 +17,28 @@ namespace kassasysteem
         {
             InitializeComponent();
             tbFocus.Visibility = Visibility.Collapsed;
+            //setItemGroups();
+            setItems();
+        }
+
+        private async void setItemGroups()
+        {
+            var itemGroups = await Rest.getItemGroups();
+            foreach (var itemGroup in itemGroups)
+            {
+                lvItemGroups.Items?.Add(itemGroup);
+                lvItemGroups.SelectedIndex = 0;
+            }
+        }
+
+        private async void setItems()
+        {
+            var items = await Rest.getItems();
+            foreach (var item in items)
+            {
+                lvItems.Items?.Add(item);
+                lvItems.SelectedIndex = 0;
+            }
         }
 
         private void BtExit_OnClick(object sender, RoutedEventArgs e)

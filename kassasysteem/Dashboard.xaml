@@ -29,12 +29,12 @@
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Groene Vingers</TextBlock>
         </Border>
         
-        <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"></ListView>
+        <ListView x:Name="lvItemGroups" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"></ListView>
 
         <Button x:Name="btSearch" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtSearch_OnClick" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited">Zoeken</Button>
         <Button x:Name="btExit" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtExit_OnClick"  PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited">Afsluiten</Button>
         
-        <Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black"></Grid>
+        <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black"></ListView>
 
         <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="3" BorderThickness="1,0,0,0" BorderBrush="Black">
             <Grid.RowDefinitions>

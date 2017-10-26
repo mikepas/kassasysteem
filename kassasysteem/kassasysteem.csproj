@@ -97,6 +97,8 @@
     </Compile>
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\Error.cs" />
+    <Compile Include="Classes\ItemGroups.cs" />
+    <Compile Include="Classes\Items.cs" />
     <Compile Include="Classes\OAuth.cs" />
     <Compile Include="Classes\Rest.cs" />
     <Compile Include="CustomerPage.xaml.cs">
