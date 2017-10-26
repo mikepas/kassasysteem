@@ -4,16 +4,18 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace kassasysteem
 {
     public sealed partial class Dashboard : Page
     {
+        private bool setFocus = true;
+
         public Dashboard()
         {
             InitializeComponent();
-            tbFocus.Focus(FocusState.Programmatic);
-            //tbFocus.Visibility = Visibility.Collapsed;
+            tbFocus.Visibility = Visibility.Collapsed;
         }
 
         private void BtExit_OnClick(object sender, RoutedEventArgs e)
@@ -21,7 +23,21 @@ namespace kassasysteem
             CoreApplication.Exit();
         }
 
-        private async void BtSearch_OnClick(object sender, RoutedEventArgs e)
+        private void BtSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            OpenNewWindow();
+            tbFocus.Focus(FocusState.Programmatic);
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (setFocus)
+            {
+                tbFocus.Focus(FocusState.Programmatic);
+            }
+        }
+
+        private async void OpenNewWindow()
         {
             var newView = CoreApplication.CreateNewView();
             var newViewId = 0;
@@ -37,9 +53,14 @@ namespace kassasysteem
             await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            ((TextBox)sender).Focus(FocusState.Programmatic);
+            setFocus = false;
+        }
+
+        private void Button_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            setFocus = true;
         }
     }
 }
