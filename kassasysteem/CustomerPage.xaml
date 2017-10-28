@@ -20,7 +20,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="#FF8BB95C" BorderThickness="0,0,0,1" BorderBrush="Black">
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="#FF8BB95C" BorderThickness="0,0,0,1" BorderBrush="Black">
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Groene Vingers</TextBlock>
         </Border>
         

@@ -11,12 +11,14 @@ namespace kassasysteem.Classes
         public string ID = "";
         public string Code = "";
         public string Description = "";
+        public string CostPriceStandard = "";
 
-        public Items(string i, string c, string d)
+        public Items(string i, string c, string d, string cp)
         {
             ID = i;
             Code = c;
             Description = d;
+            CostPriceStandard = cp;
         }
 
         public Items() { }
