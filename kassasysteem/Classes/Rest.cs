@@ -11,11 +11,11 @@ namespace kassasysteem.Classes
 {
     class Rest
     {
-        public static async Task<List<Items>> getItems(string f = "")
+        public static async Task<List<Items>> getItems(string itemGroupDescription = "", string description = "", string code = null)
         {
             await OAuth.getAccess();
 
-            string filter = "&$filter=substringof('" + f + "',ItemGroupDescription)+eq+true";
+            string filter = "&$filter=substringof('" + itemGroupDescription + "',ItemGroupDescription)+eq+true";
             string orderby = "&$orderby=Code+asc";
             Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/logistics/Items?access_token=" + OAuth.AccessToken + filter + orderby);
 

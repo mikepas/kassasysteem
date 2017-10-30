@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
@@ -108,31 +107,21 @@ namespace kassasysteem
         {
             ListView lv = (ListView)sender;
             if (!(lv.SelectedItem is Items selectedItem)) return;
-            var description = selectedItem?.Description;
-            var costPrice = selectedItem?.CostPriceStandard;
-            _orderItems.Add(new OrderItems() { Description = description, Amount = "1", CostPriceStandard = costPrice });
+            var description = selectedItem.Description;
+            var costPrice = selectedItem.CostPriceStandard;
+            _orderItems.Add(new OrderItems { Description = description, Amount = "1", CostPriceStandard = costPrice });
             lvOrderItems.ItemsSource = _orderItems;
         }
 
         private void btDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (lvOrderItems.SelectedItems == null)
+            if (lvOrderItems.SelectedItem == null)
             {
-                lvOrderItems.Items?.Clear();
+                _orderItems?.Clear();
             }
             else
             {
-                if (lvOrderItems.SelectedItems != null)
-                {
-                    lvOrderItems.Items?.Remove(lvOrderItems.SelectedItem);
-                }
-                else
-                {
-                    foreach (ListViewItem eachItem in lvOrderItems.SelectedItems)
-                    {
-                        lvOrderItems.Items?.Remove(eachItem);
-                    }
-                }
+                _orderItems?.Remove(lvOrderItems.SelectedItem as OrderItems);
             }
             tbFocus.Focus(FocusState.Programmatic);
         }

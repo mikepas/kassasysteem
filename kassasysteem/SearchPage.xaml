@@ -32,7 +32,7 @@
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Gegevens invullen</TextBlock>
         </Border>
         
-        <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,1,0" BorderBrush="Black"></ListView>
+        <ListView x:Name="lvSearchResults" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,1,0" BorderBrush="Black" SelectionChanged="lvSearchResults_SelectionChanged"></ListView>
 
         <Grid Grid.Row="1" Grid.Column="3">
             <Grid.RowDefinitions>
@@ -47,12 +47,12 @@
             </Grid.ColumnDefinitions>
             
             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,6">Naam:</TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="30,0"></TextBox>
+            <TextBox x:Name="tbName" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="30,0"></TextBox>
             
             <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,20,0,0">Code:</TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="30,15"></TextBox>
+            <TextBox x:Name="tbCode" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="30,15"></TextBox>
             
-            <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100"  Margin="30,0" Background="Green">Zoek</Button>
+            <Button x:Name="btSearch" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100"  Margin="30,0" Background="Green" Click="btSearch_Click">Zoek</Button>
         </Grid>
     </Grid>
 </Page>
