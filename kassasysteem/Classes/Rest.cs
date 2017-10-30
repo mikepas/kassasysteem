@@ -15,7 +15,7 @@ namespace kassasysteem.Classes
         {
             await OAuth.getAccess();
 
-            string filter = "&$filter=substringof('" + itemGroupDescription + "',ItemGroupDescription)+eq+true";
+            string filter = "&$filter=substringof('" + itemGroupDescription + "',ItemGroupDescription)+eq+true+and+substringof('" + description + "',Description)+eq+true+and+substringof('" + code + "',Code)+eq+true";
             string orderby = "&$orderby=Code+asc";
             Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/logistics/Items?access_token=" + OAuth.AccessToken + filter + orderby);
 
