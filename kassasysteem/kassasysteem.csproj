@@ -100,6 +100,7 @@
     <Compile Include="Classes\ItemGroups.cs" />
     <Compile Include="Classes\Items.cs" />
     <Compile Include="Classes\OAuth.cs" />
+    <Compile Include="Classes\OrderItems.cs" />
     <Compile Include="Classes\Rest.cs" />
     <Compile Include="CustomerPage.xaml.cs">
       <DependentUpon>CustomerPage.xaml</DependentUpon>

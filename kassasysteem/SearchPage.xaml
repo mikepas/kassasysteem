@@ -13,9 +13,9 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="250"></ColumnDefinition>
+            <ColumnDefinition Width="180"></ColumnDefinition>
+            <ColumnDefinition Width="80"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
@@ -32,7 +32,28 @@
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Gegevens invullen</TextBlock>
         </Border>
         
-        <ListView x:Name="lvSearchResults" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,1,0" BorderBrush="Black" SelectionChanged="lvSearchResults_SelectionChanged"></ListView>
+        <ListView x:Name="lvSearchResults" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,1,0" BorderBrush="Black" SelectionChanged="lvSearchResults_SelectionChanged">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Description}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Code}"/>
+                        <TextBlock Grid.Column="2" Text="{Binding CostPriceStandard}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
         <Grid Grid.Row="1" Grid.Column="3">
             <Grid.RowDefinitions>

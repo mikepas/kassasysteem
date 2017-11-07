@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace kassasysteem.Classes
+﻿namespace kassasysteem.Classes
 {
-    class ItemGroups
+    internal class ItemGroups
     {
-        public string ID = "";
         public string Code = "";
         public string Description = "";
+        public string ID = "";
 
         public ItemGroups(string i, string c, string d)
         {
@@ -19,7 +13,9 @@ namespace kassasysteem.Classes
             Description = d;
         }
 
-        public ItemGroups() { }
+        public ItemGroups()
+        {
+        }
 
         public override string ToString()
         {

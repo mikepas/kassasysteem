@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
@@ -14,32 +13,39 @@ namespace kassasysteem
     public sealed partial class Dashboard : Page
     {
         private bool _setFocus = true;
-        private readonly ObservableCollection<OrderItems> _orderItems;
 
         public Dashboard()
         {
             InitializeComponent();
-            tbFocus.Visibility = Visibility.Collapsed;
-            _orderItems = new ObservableCollection<OrderItems>();
-            getData();
         }
 
-        private async Task getData()
+        private static async Task OpenCustomerPage()
         {
-            await setItemGroups();
+            var newView = CoreApplication.CreateNewView();
+            var newViewId = 0;
+            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var frame = new Frame();
+                frame.Navigate(typeof(CustomerPage), null);
+                Window.Current.Content = frame;
+                Window.Current.Activate();
+
+                newViewId = ApplicationView.GetForCurrentView().Id;
+            });
+            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
         }
 
-        private async Task setItemGroups()
+        private async Task SetItemGroups()
         {
             var itemGroups = await Rest.getItemGroups();
             foreach (var itemGroup in itemGroups)
             {
                 lvItemGroups.Items?.Add(itemGroup);
-                lvItemGroups.SelectedIndex = 0;
             }
+            lvItemGroups.SelectedIndex = 0;
         }
 
-        private async Task setItems(string itemGroup)
+        private async Task SetItems(string itemGroup)
         {
             var items = await Rest.getItems(itemGroup);
             if (lvItems.Items != null)
@@ -47,7 +53,7 @@ namespace kassasysteem
                 lvItems.Items.Clear();
                 foreach (var item in items)
                 {
-                    lvItems.Items?.Add(item);
+                    lvItems.Items.Add(item);
                 }
             }
         }
@@ -59,7 +65,7 @@ namespace kassasysteem
 
         private void BtSearch_OnClick(object sender, RoutedEventArgs e)
         {
-            OpenNewWindow();
+            OpenSearchPage();
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -71,7 +77,17 @@ namespace kassasysteem
             }
         }
 
-        private async void OpenNewWindow()
+        private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            _setFocus = false;
+        }
+
+        private void Button_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            _setFocus = true;
+        }
+
+        private static async void OpenSearchPage()
         {
             var newView = CoreApplication.CreateNewView();
             var newViewId = 0;
@@ -87,61 +103,55 @@ namespace kassasysteem
             await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
         }
 
-        private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            _setFocus = false;
-        }
-
-        private void Button_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            _setFocus = true;
-        }
-
         private async void lvItemGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListView lv = (ListView)sender;
-            if (lv.SelectedItem != null) await setItems(lv.SelectedItem.ToString());
+            if (lv.SelectedItem != null) await SetItems(lv.SelectedItem.ToString());
         }
 
         private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListView lv = (ListView)sender;
+            var lv = (ListView)sender;
             if (!(lv.SelectedItem is Items selectedItem)) return;
             var description = selectedItem.Description;
             var costPrice = selectedItem.CostPriceStandard;
-            _orderItems.Add(new OrderItems { Description = description, Amount = "1", CostPriceStandard = costPrice });
-            lvOrderItems.ItemsSource = _orderItems;
+            OrderItems._orderItems.Add(new OrderItems { Description = description, Amount = "1", CostPriceStandard = costPrice });
+            lvOrderItems.ItemsSource = OrderItems._orderItems;
         }
 
         private void btDelete_Click(object sender, RoutedEventArgs e)
         {
             if (lvOrderItems.SelectedItem == null)
             {
-                _orderItems?.Clear();
+                OrderItems._orderItems?.Clear();
             }
             else
             {
-                _orderItems?.Remove(lvOrderItems.SelectedItem as OrderItems);
+                OrderItems._orderItems?.Remove(lvOrderItems.SelectedItem as OrderItems);
             }
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        public class OrderItems
-        {
-            public string Description { get; set; }
-            public string Amount { get; set; }
-            public string CostPriceStandard { get; set; }
-        }
-
         private void btCheckOut_Click(object sender, RoutedEventArgs e)
         {
-            var order = lvOrderItems.Items;
+            //var order = lvOrderItems.Items;
             tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void btRetour_Click(object sender, RoutedEventArgs e)
         {
             tbFocus.Focus(FocusState.Programmatic);
+        }
+
+        public void UpdateOrderItems()
+        {
+            lvOrderItems.ItemsSource = OrderItems._orderItems;
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            await SetItemGroups();
+            await OpenCustomerPage();
         }
     }
 }

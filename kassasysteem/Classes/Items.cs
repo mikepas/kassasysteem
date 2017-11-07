@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace kassasysteem.Classes
+﻿namespace kassasysteem.Classes
 {
-    class Items
+    internal class Items
     {
-        public string ID = "";
+        public string Amount = "";
         public string Code = "";
-        public string Description = "";
         public string CostPriceStandard = "";
+        public string Description = "";
+        public string ID = "";
 
-        public Items(string i, string c, string d, string cp)
+        public Items(string i, string c, string d, string cp, string a)
         {
             ID = i;
             Code = c;
             Description = d;
             CostPriceStandard = cp;
+            Amount = a;
         }
 
-        public Items() { }
+        public Items()
+        {
+        }
 
         public override string ToString()
         {

@@ -5,7 +5,7 @@
     xmlns:local="using:kassasysteem"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" FontSize="18">
+    mc:Ignorable="d" FontSize="18" Loaded="Page_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -23,13 +23,13 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="tbFocus" Grid.Row="1" Grid.Column="0" Height="20" LostFocus="TextBox_LostFocus"></TextBox>
+        <TextBox x:Name="tbFocus" Grid.Row="1" Grid.Column="0" Height="20" LostFocus="TextBox_LostFocus" Visibility="Collapsed"></TextBox>
 
         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="#FF8BB95C">
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Groene Vingers</TextBlock>
         </Border>
-        
-        <ListView x:Name="lvItemGroups" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionChanged="lvItemGroups_SelectionChanged"></ListView>
+
+        <ListView x:Name="lvItemGroups" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionChanged="lvItemGroups_SelectionChanged"/>
 
         <Button x:Name="btSearch" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtSearch_OnClick" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited">Zoeken</Button>
         <Button x:Name="btExit" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtExit_OnClick"  PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited">Afsluiten</Button>
@@ -63,10 +63,12 @@
             </Grid>
 
             <ListView Name="lvOrderItems" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch">
@@ -75,9 +77,9 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{Binding Description}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Amount}"/>
-                            <TextBlock Grid.Column="2" Text="{Binding CostPriceStandard}"/>
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="{Binding Description}"/>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding Amount}"/>
+                            <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding CostPriceStandard}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
