@@ -40,7 +40,7 @@ namespace kassasysteem
         {
             GetCode(args.Uri.ToString());
             var script = "document.documentElement.style.overflow ='hidden';"
-                         + "document.body.style.backgroundColor = 'green';"
+                         + "document.body.style.backgroundColor = 'YellowGreen';"
                          + "document.getElementById('LoginForm').style.width='400px';"
                          + "document.getElementById('LoginForm').style.align='center';"
                          + "document.getElementById('LoginForm').style.marginTop='-100px';"

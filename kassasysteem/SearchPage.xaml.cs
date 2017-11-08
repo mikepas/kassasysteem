@@ -7,15 +7,12 @@ namespace kassasysteem
 {
     public sealed partial class SearchPage : Page
     {
-        //private readonly ObservableCollection<OrderItems> _orderItems;
-
         private readonly ObservableCollection<Items> _items;
 
         public SearchPage()
         {
             InitializeComponent();
             _items = new ObservableCollection<Items>();
-            //OrderItems._orderItems = new ObservableCollection<OrderItems>();
         }
 
         private async void btSearch_Click(object sender, RoutedEventArgs e)

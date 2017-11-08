@@ -28,7 +28,7 @@
         <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">Aantal</TextBlock>
         <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Prijs</TextBlock>
 
-        <ListView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,1" BorderBrush="Black"></ListView>
+        <ListView x:Name="lvOrderItems" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,1" BorderBrush="Black"></ListView>
 
         <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0">Totaal:</TextBlock>
         <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20,0">$25,00</TextBlock>
