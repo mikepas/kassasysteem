@@ -11,11 +11,15 @@ namespace kassasysteem.Classes
 {
     class Rest
     {
-        public static async Task<List<Items>> getItems(string itemGroupDescription = "", string description = "", string code = null)
+        public static async Task<List<Items>> getItems(string itemGroupDescription = "", string description = "", string code = null, string barcode = null)
         {
             await OAuth.getAccess();
 
             string filter = "&$filter=substringof('" + itemGroupDescription + "',ItemGroupDescription)+eq+true+and+substringof('" + description + "',Description)+eq+true+and+substringof('" + code + "',Code)+eq+true";
+            if (barcode != null)
+            {
+                filter += "+and+substringof('" + barcode + "',Barcode)+eq+true";
+            }
             string orderby = "&$orderby=Code+asc";
             Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/logistics/Items?access_token=" + OAuth.AccessToken + filter + orderby);
 

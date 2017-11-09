@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.Globalization;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using kassasysteem.Classes;
 
 namespace kassasysteem
@@ -17,11 +21,13 @@ namespace kassasysteem
     public sealed partial class Dashboard : Page
     {
         private bool _setFocus = true;
-        private string _totalCost;
+        private readonly List<float> _totalCost = new List<float> { };
+        private int _selectedSearchOption = 1;
 
         public Dashboard()
         {
             InitializeComponent();
+            ApplicationLanguages.PrimaryLanguageOverride = "nl";
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -121,8 +127,9 @@ namespace kassasysteem
             var item = (ListView)sender;
             if (!(item.SelectedItem is Items selectedItem)) return;
             var description = selectedItem.Description;
-            var costPrice = selectedItem.CostPriceStandard;
-            _totalCost += "0|"+costPrice;
+            var costPrice = float.Parse(selectedItem.CostPriceStandard, CultureInfo.InvariantCulture.NumberFormat);
+            _totalCost.Add(costPrice);
+
             // werkt nog niet
             if (lvOrderItems.Items != null && lvOrderItems.Items.Contains(description))
             {
@@ -130,7 +137,7 @@ namespace kassasysteem
                 {
                     Description = description,
                     Amount = "2",
-                    CostPriceStandard = costPrice
+                    CostPriceStandard = costPrice.ToString("C2")
                 });
             }
             else
@@ -139,16 +146,12 @@ namespace kassasysteem
                 {
                     Description = description,
                     Amount = "1", 
-                    CostPriceStandard = costPrice
+                    CostPriceStandard = costPrice.ToString("C2")
                 });
             }
-            lvOrderItems.ItemsSource = OrderItems._orderItems;
 
-            // zorgen dat hij de prijs bij elkaar kan optellen
-            Int32 sum = _totalCost.Split(new char[] { '|' })
-                                  .Select(n => Int32.Parse(n))
-                                  .Sum();
-            tbTotal.Text = sum.ToString();
+            lvOrderItems.ItemsSource = OrderItems._orderItems;
+            tbTotal.Text = _totalCost.Sum().ToString("c2");
         }
 
         private void btDelete_Click(object sender, RoutedEventArgs e)
@@ -161,6 +164,8 @@ namespace kassasysteem
             {
                 OrderItems._orderItems?.Remove(lvOrderItems.SelectedItem as OrderItems);
             }
+            _totalCost.Clear();
+            tbTotal.Text = _totalCost.Sum().ToString("c2");
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -189,11 +194,11 @@ namespace kassasysteem
         private void tbSearch_LostFocus(object sender, RoutedEventArgs e)
         {
             tbSearch.Text = "Wat wilt u zoeken?";
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private async void tbSearch_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            // laat ze kiezen of ze willen zoeken op naam of op nummer
             switch (tbSearch.Text)
             {
                 case "Wat wilt u zoeken?":
@@ -201,12 +206,40 @@ namespace kassasysteem
                 case "":
                     return;
             }
-            var items = await Rest.getItems("",tbSearch.Text);
-            lvItems.Items?.Clear();
-            foreach (var item in items)
+            List<Items> items;
+            if (_selectedSearchOption == 1)
             {
-                lvItems.Items?.Add(item);
+                items = await Rest.getItems("", tbSearch.Text);
+                lvItems.Items?.Clear();
+                foreach (var item in items)
+                {
+                    lvItems.Items?.Add(item);
+                }
             }
+            else if (_selectedSearchOption == 2)
+            {
+                items = await Rest.getItems("", "", "", tbSearch.Text);
+                lvItems.Items?.Clear();
+                foreach (var item in items)
+                {
+                    lvItems.Items?.Add(item);
+                }
+            }
+        }
+
+        private void tbtName_Click(object sender, RoutedEventArgs e)
+        {
+            btName.Background = new SolidColorBrush(Colors.YellowGreen);
+            btBarcode.Background = new SolidColorBrush(Colors.LightGray);
+            _selectedSearchOption = 1;
+        }
+
+        private void tbtBarcode_Click(object sender, RoutedEventArgs e)
+        {
+            btBarcode.Background = new SolidColorBrush(Colors.YellowGreen);
+            btName.Background = new SolidColorBrush(Colors.LightGray);
+            _selectedSearchOption = 2;
+
         }
 
         private void tbFocus_SelectionChanged(object sender, RoutedEventArgs e)

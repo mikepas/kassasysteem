@@ -12,8 +12,8 @@
             <ResourceDictionary.ThemeDictionaries>
 
                 <ResourceDictionary x:Key="Default">
-                    <SolidColorBrush x:Key="ListViewItemBackgroundSelected">#FF8BB95C</SolidColorBrush>
-                    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver">#AF8BB95C</SolidColorBrush>
+                    <SolidColorBrush x:Key="ListViewItemBackgroundSelected">YellowGreen</SolidColorBrush>
+                    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver">GreenYellow</SolidColorBrush>
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Key="HighContrast">
@@ -28,6 +28,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
@@ -37,22 +38,25 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
+        
         <TextBox x:Name="tbFocus" Grid.Row="1" Grid.Column="0" Height="20" LostFocus="TextBox_LostFocus" Visibility="Collapsed" SelectionChanged="tbFocus_SelectionChanged"></TextBox>
 
-        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="#FF8BB95C">
-            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Groene Vingers</TextBlock>
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="YellowGreen">
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Groene Vingers</TextBlock>
         </Border>
 
         <ListView x:Name="lvItemGroups" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" SelectionChanged="lvItemGroups_SelectionChanged"/>
 
+        <Button x:Name="btName" Grid.Row="2" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="Naam" Background="YellowGreen" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="tbtName_Click"/>
+        <Button x:Name="btBarcode" Grid.Row="2" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="Barcode" Background="LightGray" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="tbtBarcode_Click"/>
+
         <!--<Button x:Name="btSearch" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtSearch_OnClick" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited">Zoeken</Button>-->
-        <TextBox x:Name="tbSearch" Text="Wat wilt u zoeken?" Padding="10,15,0,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" GotFocus="tbSearch_GotFocus" LostFocus="tbSearch_LostFocus" SelectionChanged="tbSearch_SelectionChanged"/>
-        <Button x:Name="btExit" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btExit_Click">Afsluiten</Button>
+        <TextBox x:Name="tbSearch" Text="Wat wilt u zoeken?" Padding="10,15,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" GotFocus="tbSearch_GotFocus" LostFocus="tbSearch_LostFocus" SelectionChanged="tbSearch_SelectionChanged"/>
+        <Button x:Name="btExit" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btExit_Click">Afsluiten</Button>
 
-        <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black" Tapped="lvItems_Tapped"/>
+        <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black" Tapped="lvItems_Tapped"/>
 
-        <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="3" BorderThickness="1,0,0,0" BorderBrush="Black">
+        <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="4" BorderThickness="1,0,0,0" BorderBrush="Black">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>

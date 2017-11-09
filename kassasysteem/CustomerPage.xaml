@@ -20,8 +20,8 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="#FF8BB95C" BorderThickness="0,0,0,1" BorderBrush="Black">
-            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Groene Vingers</TextBlock>
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="YellowGreen" BorderThickness="0,0,0,1" BorderBrush="Black">
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Groene Vingers</TextBlock>
         </Border>
         
         <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">Artikel</TextBlock>

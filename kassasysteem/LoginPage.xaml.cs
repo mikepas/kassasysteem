@@ -38,7 +38,7 @@ namespace kassasysteem
 
         private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            GetCode(args.Uri.ToString());
+            //GetCode(args.Uri.ToString());
             var script = "document.documentElement.style.overflow ='hidden';"
                          + "document.body.style.backgroundColor = 'YellowGreen';"
                          + "document.getElementById('LoginForm').style.width='400px';"
@@ -64,7 +64,7 @@ namespace kassasysteem
 
         private void WebBrowser_OnNavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
         {
-            //GetCode(args.Uri.ToString());
+            GetCode(args.Uri.ToString());
         }
     }
 }
