@@ -52,7 +52,8 @@
 
         <!--<Button x:Name="btSearch" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtSearch_OnClick" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited">Zoeken</Button>-->
         <TextBox x:Name="tbSearch" Text="Wat wilt u zoeken?" Padding="10,15,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" GotFocus="tbSearch_GotFocus" LostFocus="tbSearch_LostFocus" SelectionChanged="tbSearch_SelectionChanged"/>
-        <Button x:Name="btExit" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btExit_Click">Afsluiten</Button>
+        <Button x:Name="btExit" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btExit_Click">Afsluiten</Button>
+        <Button x:Name="btEntry" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btEntry_Click">Aanmelden</Button>
 
         <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black" Tapped="lvItems_Tapped"/>
 

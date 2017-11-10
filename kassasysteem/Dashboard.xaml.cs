@@ -256,5 +256,21 @@ namespace kassasysteem
         {
             _setFocus = true;
         }
+
+        private async void btEntry_Click(object sender, RoutedEventArgs e)
+        {
+            var newView = CoreApplication.CreateNewView();
+            var newViewId = 0;
+            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var frame = new Frame();
+                frame.Navigate(typeof(EntryPage), null);
+                Window.Current.Content = frame;
+                Window.Current.Activate();
+
+                newViewId = ApplicationView.GetForCurrentView().Id;
+            });
+            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+        }
     }
 }
