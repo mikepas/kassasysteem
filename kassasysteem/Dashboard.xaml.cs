@@ -7,11 +7,13 @@ using Windows.ApplicationModel.Core;
 using Windows.Globalization;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 using kassasysteem.Classes;
 
 namespace kassasysteem
@@ -21,8 +23,9 @@ namespace kassasysteem
     public sealed partial class Dashboard : Page
     {
         private bool _setFocus = true;
-        private readonly List<float> _totalCost = new List<float> { };
+        private readonly List<float> _totalCost = new List<float>();
         private int _selectedSearchOption = 1;
+        private string _cassiereName = "";
 
         public Dashboard()
         {
@@ -33,7 +36,7 @@ namespace kassasysteem
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await SetItemGroups();
-            await OpenCustomerPage();
+            //await OpenCustomerPage();
         }
 
         private static async Task OpenCustomerPage()
@@ -172,6 +175,7 @@ namespace kassasysteem
         private void btCheckOut_Click(object sender, RoutedEventArgs e)
         {
             // Laat een window zien met alle orderItems en of ze kortingspunten willen invoeren en laat ze kiezen tussen 'afrekenen' of 'annuleren'
+            var orderItems = lvOrderItems.Items;
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -257,9 +261,10 @@ namespace kassasysteem
             _setFocus = true;
         }
 
-        private async void btEntry_Click(object sender, RoutedEventArgs e)
+        private void btEntry_Click(object sender, RoutedEventArgs e)
         {
-            var newView = CoreApplication.CreateNewView();
+            Frame.Navigate(typeof(EntryPage));
+            /*var newView = CoreApplication.CreateNewView();
             var newViewId = 0;
             await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -270,7 +275,14 @@ namespace kassasysteem
 
                 newViewId = ApplicationView.GetForCurrentView().Id;
             });
-            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);*/
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter == null) return;
+            _cassiereName = e.Parameter as string;
+            if (_cassiereName != null) tbCassiereName.Text += " " + _cassiereName;
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using System;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using kassasysteem.Classes;
@@ -25,7 +28,7 @@ namespace kassasysteem
             webBrowser.Focus(FocusState.Programmatic);
         }
 
-        private void GetCode(string url)
+        private async void GetCode(string url)
         {
             if (url.IndexOf(Constants.BASE_URI, StringComparison.Ordinal) >= 0) return;
             var c = url.IndexOf("?code=", StringComparison.Ordinal);
@@ -33,7 +36,21 @@ namespace kassasysteem
             OAuth.Code = url.Substring(c + 6, s - c - 6);
             OAuth.State = url.Substring(s + 7);
 
-            Frame.Navigate(typeof(Dashboard), 0);
+            var newView = CoreApplication.CreateNewView();
+            var newViewId = 0;
+            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                var frame = new Frame();
+                frame.Navigate(typeof(CustomerPage), null);
+                Window.Current.Content = frame;
+                Window.Current.Activate();
+
+                newViewId = ApplicationView.GetForCurrentView().Id;
+            });
+            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+
+            //Frame.Navigate(typeof(Dashboard), 0);
+            Frame.Navigate(typeof(EntryPage));
         }
 
         private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
