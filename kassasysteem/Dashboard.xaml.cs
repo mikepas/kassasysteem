@@ -39,7 +39,7 @@ namespace kassasysteem
             //await OpenCustomerPage();
         }
 
-        private static async Task OpenCustomerPage()
+        /*private static async Task OpenCustomerPage()
         {
             var newView = CoreApplication.CreateNewView();
             var newViewId = 0;
@@ -53,7 +53,7 @@ namespace kassasysteem
                 newViewId = ApplicationView.GetForCurrentView().Id;
             });
             await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-        }
+        }*/
 
         private async Task SetItemGroups()
         {
@@ -113,6 +113,7 @@ namespace kassasysteem
         {
             ListView lv = (ListView)sender;
             if (lv.SelectedItem != null) await SetItems(lv.SelectedItem.ToString());
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         /*private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -155,6 +156,7 @@ namespace kassasysteem
 
             lvOrderItems.ItemsSource = OrderItems._orderItems;
             tbTotal.Text = _totalCost.Sum().ToString("c2");
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void btDelete_Click(object sender, RoutedEventArgs e)
@@ -193,6 +195,7 @@ namespace kassasysteem
         private void tbSearch_GotFocus(object sender, RoutedEventArgs e)
         {
             tbSearch.Text = "";
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void tbSearch_LostFocus(object sender, RoutedEventArgs e)
@@ -229,6 +232,7 @@ namespace kassasysteem
                     lvItems.Items?.Add(item);
                 }
             }
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void tbtName_Click(object sender, RoutedEventArgs e)
@@ -236,6 +240,7 @@ namespace kassasysteem
             btName.Background = new SolidColorBrush(Colors.YellowGreen);
             btBarcode.Background = new SolidColorBrush(Colors.LightGray);
             _selectedSearchOption = 1;
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void tbtBarcode_Click(object sender, RoutedEventArgs e)
@@ -243,7 +248,7 @@ namespace kassasysteem
             btBarcode.Background = new SolidColorBrush(Colors.YellowGreen);
             btName.Background = new SolidColorBrush(Colors.LightGray);
             _selectedSearchOption = 2;
-
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void tbFocus_SelectionChanged(object sender, RoutedEventArgs e)
