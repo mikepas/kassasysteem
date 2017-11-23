@@ -25,6 +25,7 @@ namespace kassasysteem
         private bool _setFocus = true;
         private readonly List<float> _totalCost = new List<float>();
         private int _selectedSearchOption = 1;
+        private int _selectedSaleRetour = 1;
         private string _cassiereName = "";
 
         public Dashboard()
@@ -177,13 +178,32 @@ namespace kassasysteem
         private void btCheckOut_Click(object sender, RoutedEventArgs e)
         {
             // Laat een window zien met alle orderItems en of ze kortingspunten willen invoeren en laat ze kiezen tussen 'afrekenen' of 'annuleren'
-            var orderItems = lvOrderItems.Items;
+            if (_selectedSaleRetour == 1)
+            {
+                var salesItems = lvOrderItems.Items;
+            }
+            else if (_selectedSaleRetour == 2)
+            {
+                var retourItems = lvOrderItems.Items;
+            }
             tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void btRetour_Click(object sender, RoutedEventArgs e)
         {
-            // laat een window zien met wat je retourt en laat ze kiezen tussen 'retourneren' of 'annuleren'
+            lvOrderItems.Items?.Clear();
+            btRetour.Background = new SolidColorBrush(Colors.YellowGreen);
+            btVerkoop.Background = new SolidColorBrush(Colors.LightGray);
+            _selectedSaleRetour = 2;
+            tbFocus.Focus(FocusState.Programmatic);
+        }
+
+        private void btVerkoop_Click(object sender, RoutedEventArgs e)
+        {
+            lvOrderItems.Items?.Clear();
+            btVerkoop.Background = new SolidColorBrush(Colors.YellowGreen);
+            btRetour.Background = new SolidColorBrush(Colors.LightGray);
+            _selectedSaleRetour = 1;
             tbFocus.Focus(FocusState.Programmatic);
         }
 

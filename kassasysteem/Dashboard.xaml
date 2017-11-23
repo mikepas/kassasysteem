@@ -73,7 +73,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
  
-            <Button x:Name="btRetour" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,0,0,1" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btRetour_Click">Retour</Button>
+            <Button x:Name="btRetour" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray" BorderThickness="0,0,0,1" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btRetour_Click">Retour</Button>
+            <Button x:Name="btVerkoop" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="YellowGreen" BorderThickness="0,0,1,1" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btVerkoop_Click">Retour</Button>
 
             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0,0,2" BorderBrush="Black">
                 <Grid.ColumnDefinitions>
@@ -110,7 +111,7 @@
             </ListView>
 
             <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,0">Totaal:</TextBlock>
-            <TextBlock x:Name="tbTotal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">$25,00</TextBlock>
+            <TextBlock x:Name="tbTotal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
 
             <Button x:Name="btDelete" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="btDelete_Click">Wissen</Button>
             <Button x:Name="btCheckOut" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="btCheckOut_Click">Afrekenen</Button>
