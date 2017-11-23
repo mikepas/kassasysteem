@@ -178,20 +178,23 @@ namespace kassasysteem
         private void btCheckOut_Click(object sender, RoutedEventArgs e)
         {
             // Laat een window zien met alle orderItems en of ze kortingspunten willen invoeren en laat ze kiezen tussen 'afrekenen' of 'annuleren'
-            if (_selectedSaleRetour == 1)
+            switch (_selectedSaleRetour)
             {
-                var salesItems = lvOrderItems.Items;
-            }
-            else if (_selectedSaleRetour == 2)
-            {
-                var retourItems = lvOrderItems.Items;
+                case 1:
+                    var salesItems = lvOrderItems.Items;
+                    break;
+                case 2:
+                    var retourItems = lvOrderItems.Items;
+                    break;
             }
             tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void btRetour_Click(object sender, RoutedEventArgs e)
         {
-            lvOrderItems.Items?.Clear();
+            OrderItems._orderItems?.Clear();
+            _totalCost.Clear();
+            tbTotal.Text = _totalCost.Sum().ToString("c2");
             btRetour.Background = new SolidColorBrush(Colors.YellowGreen);
             btVerkoop.Background = new SolidColorBrush(Colors.LightGray);
             _selectedSaleRetour = 2;
@@ -200,7 +203,9 @@ namespace kassasysteem
 
         private void btVerkoop_Click(object sender, RoutedEventArgs e)
         {
-            lvOrderItems.Items?.Clear();
+            OrderItems._orderItems?.Clear();
+            _totalCost.Clear();
+            tbTotal.Text = _totalCost.Sum().ToString("c2");
             btVerkoop.Background = new SolidColorBrush(Colors.YellowGreen);
             btRetour.Background = new SolidColorBrush(Colors.LightGray);
             _selectedSaleRetour = 1;

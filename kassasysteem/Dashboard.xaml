@@ -74,7 +74,7 @@
             </Grid.ColumnDefinitions>
  
             <Button x:Name="btRetour" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightGray" BorderThickness="0,0,0,1" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btRetour_Click">Retour</Button>
-            <Button x:Name="btVerkoop" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="YellowGreen" BorderThickness="0,0,1,1" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btVerkoop_Click">Retour</Button>
+            <Button x:Name="btVerkoop" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="YellowGreen" BorderThickness="0,0,1,1" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btVerkoop_Click">Verkoop</Button>
 
             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0,0,2" BorderBrush="Black">
                 <Grid.ColumnDefinitions>
