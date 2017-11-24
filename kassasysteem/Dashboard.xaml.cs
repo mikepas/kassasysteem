@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Globalization;
@@ -74,6 +75,12 @@ namespace kassasysteem
                 lvItems.Items.Clear();
                 foreach (var item in items)
                 {
+                    var salesPrice = await Rest.getItemPrice(item.ID);
+                    if (salesPrice == "")
+                    {
+                        salesPrice = "0";
+                    }
+                    item.SalesPrice = salesPrice;
                     lvItems.Items.Add(item);
                 }
             }
@@ -132,7 +139,7 @@ namespace kassasysteem
             var item = (ListView)sender;
             if (!(item.SelectedItem is Items selectedItem)) return;
             var description = selectedItem.Description;
-            var costPrice = float.Parse(selectedItem.CostPriceStandard, CultureInfo.InvariantCulture.NumberFormat);
+            var costPrice = float.Parse(selectedItem.SalesPrice, CultureInfo.InvariantCulture.NumberFormat);
             _totalCost.Add(costPrice);
 
             // werkt nog niet

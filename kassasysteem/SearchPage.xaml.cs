@@ -22,7 +22,7 @@ namespace kassasysteem
             _items.Clear();
             foreach (var item in searchItems)
             {
-                _items.Add(new Items {Description = item.Description, Code = item.Code, CostPriceStandard = item.CostPriceStandard});
+                _items.Add(new Items {Description = item.Description, Code = item.Code, CostPriceStandard = item.SalesPrice});
             }
             lvSearchResults.ItemsSource = _items;
         }

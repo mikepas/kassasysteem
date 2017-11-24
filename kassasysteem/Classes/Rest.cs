@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,13 +13,24 @@ namespace kassasysteem.Classes
         public static async Task<List<Items>> getItems(string itemGroupDescription = "", string description = "", string code = null, string barcode = null)
         {   
             await OAuth.getAccess();
-
-            string filter = "&$filter=substringof('" + Uri.EscapeDataString(itemGroupDescription) + "',ItemGroupDescription)+eq+true+and+substringof('" + description + "',Description)+eq+true+and+substringof('" + code + "',Code)+eq+true";
+            string filter = "&$filter=";
+            if (itemGroupDescription != null)
+            {
+                filter += "substringof('" + Uri.EscapeDataString(itemGroupDescription) + "',ItemGroupDescription)+eq+true";
+            }
+            if (description != null)
+            {
+                filter += "+and+substringof('" + Uri.EscapeDataString(description) + "',Description)+eq+true";
+            }
+            if (code != null)
+            {
+                filter += "+and+substringof('" + Uri.EscapeDataString(code) + "',Code)+eq+true";
+            }
             if (barcode != null)
             {
-                filter += "+and+substringof('" + barcode + "',Barcode)+eq+true";
+                filter += "+and+substringof('" + Uri.EscapeDataString(barcode) + "',Barcode)+eq+true";
             }
-            string orderby = "&$orderby=Code+asc";
+            string orderby = "&$orderby=Description+asc";
             Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/logistics/Items?access_token=" + OAuth.AccessToken + filter + orderby);
 
             HttpClient client = new HttpClient();
@@ -42,9 +52,40 @@ namespace kassasysteem.Classes
             List<Items> searchResults = new List<Items>();
             foreach (JToken result in results)
             {
-                var x = result;
                 Items searchResult = JsonConvert.DeserializeObject<Items>(result.ToString());
                 searchResults.Add(searchResult);
+            }
+            return searchResults;
+        }
+
+        public static async Task<String> getItemPrice(string id = "")
+        {
+            await OAuth.getAccess();
+            //string filter = "&$filter=substringof('" + Uri.EscapeDataString(id) + "',ID)+eq+true";
+            string select = "&$select=SalesPrice";
+            Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/read/logistics/ItemDetailsByID?access_token=" + OAuth.AccessToken + "&itemId=guid'" + id + "'" + select);
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+
+            HttpResponseMessage respons = await client.GetAsync(request);
+            if (respons.IsSuccessStatusCode == false)
+            {
+                throw new ExactError("getItems Mislukt:  status = " + respons.StatusCode.ToString());
+            }
+            respons.EnsureSuccessStatusCode();
+            string responsecontent = await respons.Content.ReadAsStringAsync();
+
+            JObject content = JObject.Parse(responsecontent);
+            IList<JToken> results = content["d"]["results"].Children().ToList();
+
+            var searchResults = "";
+            foreach (JToken result in results)
+            {
+                Items searchResult = JsonConvert.DeserializeObject<Items>(result.ToString());
+                searchResults = searchResult.SalesPrice;
             }
             return searchResults;
         }
@@ -76,7 +117,6 @@ namespace kassasysteem.Classes
             List<ItemGroups> searchResults = new List<ItemGroups>();
             foreach (JToken result in results)
             {
-                var x = result;
                 ItemGroups searchResult = JsonConvert.DeserializeObject<ItemGroups>(result.ToString());
                 searchResults.Add(searchResult);
             }

@@ -4,7 +4,7 @@
     {
         public string Amount = "";
         public string Code = "";
-        public string CostPriceStandard = "";
+        public string SalesPrice = "";
         public string Description = "";
         public string ID = "";
 
@@ -13,7 +13,7 @@
             ID = i;
             Code = c;
             Description = d;
-            CostPriceStandard = cp;
+            SalesPrice = cp;
             Amount = a;
         }
 
