@@ -69,6 +69,7 @@ namespace kassasysteem
 
         private async Task SetItems(string itemGroup)
         {
+            var priceItems = new List<object>();
             var items = await Rest.getItems(itemGroup);
             if (lvItems.Items != null)
             {
@@ -81,6 +82,10 @@ namespace kassasysteem
                         salesPrice = "0";
                     }
                     item.SalesPrice = salesPrice;
+                    priceItems.Add(item);
+                }
+                foreach (var item in priceItems)
+                {
                     lvItems.Items.Add(item);
                 }
             }
