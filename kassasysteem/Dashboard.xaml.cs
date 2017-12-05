@@ -33,6 +33,7 @@ namespace kassasysteem
         {
             InitializeComponent();
             ApplicationLanguages.PrimaryLanguageOverride = "nl";
+            tbTotal.Text = _totalCost.Sum().ToString("c2");
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -74,6 +75,7 @@ namespace kassasysteem
             if (lvItems.Items != null)
             {
                 lvItems.Items.Clear();
+                imgLoading.Visibility = Visibility.Visible;
                 foreach (var item in items)
                 {
                     var salesPrice = await Rest.getItemPrice(item.ID);
@@ -84,6 +86,7 @@ namespace kassasysteem
                     item.SalesPrice = salesPrice;
                     priceItems.Add(item);
                 }
+                imgLoading.Visibility = Visibility.Collapsed;
                 foreach (var item in priceItems)
                 {
                     lvItems.Items.Add(item);
