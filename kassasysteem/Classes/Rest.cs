@@ -22,13 +22,13 @@ namespace kassasysteem.Classes
             {
                 filter += "+and+substringof('" + Uri.EscapeDataString(description) + "',Description)+eq+true";
             }
-            if (code != null)
+            if (!string.IsNullOrEmpty(code))
             {
-                filter += "+and+substringof('" + Uri.EscapeDataString(code) + "',Code)+eq+true";
+                filter += "+and+Code eq '" + code + "'";
             }
             if (barcode != null)
             {
-                filter += "+and+substringof('" + Uri.EscapeDataString(barcode) + "',Barcode)+eq+true";
+                //filter += "+and+substringof('" + Uri.EscapeDataString(barcode) + "',Barcode)+eq+true";
             }
             string orderby = "&$orderby=Description+asc";
             Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/logistics/Items?access_token=" + OAuth.AccessToken + filter + orderby);

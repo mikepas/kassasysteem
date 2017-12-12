@@ -34,13 +34,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
             <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
-        <TextBox x:Name="tbFocus" Grid.Row="1" Grid.Column="0" Height="20" LostFocus="TextBox_LostFocus" Visibility="Collapsed" SelectionChanged="tbFocus_SelectionChanged"></TextBox>
+        <TextBox x:Name="tbFocus" Grid.Row="0" Grid.Column="0" Height="20" LostFocus="TextBox_LostFocus" KeyDown="tbFocus_KeyDown"></TextBox>
 
         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Background="YellowGreen" BorderThickness="0,0,0,1" BorderBrush="Black">
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Groene Vingers</TextBlock>
@@ -54,7 +54,7 @@
         <Button x:Name="btBarcode" Grid.Row="2" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="Barcode" Background="LightGray" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="tbtBarcode_Click"/>
 
         <!--<Button x:Name="btSearch" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" Click="BtSearch_OnClick" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited">Zoeken</Button>-->
-        <TextBox x:Name="tbSearch" Text="Wat wilt u zoeken?" Padding="10,15,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" GotFocus="tbSearch_GotFocus" LostFocus="tbSearch_LostFocus" SelectionChanged="tbSearch_SelectionChanged"/>
+        <TextBox x:Name="tbSearch" Text="Wat wilt u zoeken?" Padding="10,15,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" GotFocus="tbSearch_GotFocus" LostFocus="tbSearch_LostFocus" KeyDown="tbSearch_KeyDown"/>
         <Button x:Name="btExit" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btExit_Click">Afsluiten</Button>
         <Button x:Name="btEntry" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btEntry_Click">Uitloggen</Button>
         <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black" Tapped="lvItems_Tapped"/>
@@ -65,6 +65,8 @@
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
@@ -87,7 +89,7 @@
                 <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">Prijs</TextBlock>
             </Grid>
 
-            <ListView Name="lvOrderItems" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
+            <ListView Name="lvOrderItems" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="0,0,0,1" BorderBrush="Black">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -111,10 +113,22 @@
             </ListView>
 
             <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,0">Totaal:</TextBlock>
-            <TextBlock x:Name="tbTotal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
+            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="Black">
+                <TextBlock x:Name="tbTotal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
+            </ContentPresenter>
 
-            <Button x:Name="btDelete" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="btDelete_Click">Wissen</Button>
-            <Button x:Name="btCheckOut" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="btCheckOut_Click">Afrekenen</Button>
+            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Grid.Column="0" BorderThickness="0,1,0,0" BorderBrush="Black">
+                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">Klantnummer:</TextBlock>
+            </ContentPresenter>
+            <TextBox x:Name="tbClient" Grid.Row="4" Grid.Column="1" BorderThickness="1,1,0,0" BorderBrush="Black" Padding="10,15,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" KeyDown="tbClient_KeyDown"></TextBox>
+
+            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Grid.Column="0" BorderThickness="0,1,0,0" BorderBrush="Black">
+                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">Kortingspunten: 5</TextBlock>
+            </ContentPresenter>
+            <Button x:Name="btInleveren" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="YellowGreen" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="BtInleveren_OnClick">Inleveren</Button>
+
+            <Button x:Name="btDelete" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="btDelete_Click">Wissen</Button>
+            <Button x:Name="btCheckOut" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="btCheckOut_Click">Afrekenen</Button>
         </Grid>
     </Grid>
 </Page>

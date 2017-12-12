@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Globalization;
+using Windows.System;
 using Windows.UI;
-using Windows.UI.Core;
-using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -19,8 +15,6 @@ using kassasysteem.Classes;
 
 namespace kassasysteem
 {
-    // Aanmeldknop aanmaken en zorgen dat een cassiere zich kan aanmelden
-
     public sealed partial class Dashboard : Page
     {
         private bool _setFocus = true;
@@ -34,6 +28,7 @@ namespace kassasysteem
             InitializeComponent();
             ApplicationLanguages.PrimaryLanguageOverride = "nl";
             tbTotal.Text = _totalCost.Sum().ToString("c2");
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -41,22 +36,6 @@ namespace kassasysteem
             await SetItemGroups();
             //await OpenCustomerPage();
         }
-
-        /*private static async Task OpenCustomerPage()
-        {
-            var newView = CoreApplication.CreateNewView();
-            var newViewId = 0;
-            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                var frame = new Frame();
-                frame.Navigate(typeof(CustomerPage), null);
-                Window.Current.Content = frame;
-                Window.Current.Activate();
-
-                newViewId = ApplicationView.GetForCurrentView().Id;
-            });
-            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-        }*/
 
         private async Task SetItemGroups()
         {
@@ -66,6 +45,7 @@ namespace kassasysteem
                 lvItemGroups.Items?.Add(itemGroup);
             }
             lvItemGroups.SelectedIndex = 0;
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private async Task SetItems(string itemGroup)
@@ -92,30 +72,13 @@ namespace kassasysteem
                     lvItems.Items.Add(item);
                 }
             }
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void btExit_Click(object sender, RoutedEventArgs e)
         {
             CoreApplication.Exit();
         }
-
-        /*private async void BtSearch_OnClick(object sender, RoutedEventArgs e)
-        {
-            var newView = CoreApplication.CreateNewView();
-            var newViewId = 0;
-            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                var frame = new Frame();
-                frame.Navigate(typeof(SearchPage), null);
-                Window.Current.Content = frame;
-                Window.Current.Activate();
-
-                newViewId = ApplicationView.GetForCurrentView().Id;
-            });
-            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-
-            tbFocus.Focus(FocusState.Programmatic);
-        }*/
 
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -131,16 +94,6 @@ namespace kassasysteem
             if (lv.SelectedItem != null) await SetItems(lv.SelectedItem.ToString());
             tbFocus.Focus(FocusState.Programmatic);
         }
-
-        /*private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var lv = (ListView)sender;
-            if (!(lv.SelectedItem is Items selectedItem)) return;
-            var description = selectedItem.Description;
-            var costPrice = selectedItem.CostPriceStandard;
-            OrderItems._orderItems.Add(new OrderItems { Description = description, Amount = "1", CostPriceStandard = costPrice });
-            lvOrderItems.ItemsSource = OrderItems._orderItems;
-        }*/
 
         private void lvItems_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -180,12 +133,18 @@ namespace kassasysteem
             if (lvOrderItems.SelectedItem == null)
             {
                 OrderItems._orderItems?.Clear();
+                _totalCost.Clear();
             }
             else
             {
-                OrderItems._orderItems?.Remove(lvOrderItems.SelectedItem as OrderItems);
+                if (lvOrderItems.SelectedItem is OrderItems orderItem)
+                {
+                    orderItem.CostPriceStandard = "-" + orderItem.CostPriceStandard.Replace("€ ", "").Replace(",00", "");
+                    var costPrice = float.Parse(orderItem.CostPriceStandard, CultureInfo.InvariantCulture.NumberFormat);
+                    _totalCost.Add(costPrice);
+                    OrderItems._orderItems?.Remove(orderItem);
+                }
             }
-            _totalCost.Clear();
             tbTotal.Text = _totalCost.Sum().ToString("c2");
             tbFocus.Focus(FocusState.Programmatic);
         }
@@ -197,9 +156,11 @@ namespace kassasysteem
             {
                 case 1:
                     var salesItems = lvOrderItems.Items;
+                    Frame.Navigate(typeof(CheckoutPage), salesItems);
                     break;
                 case 2:
                     var retourItems = lvOrderItems.Items;
+                    Frame.Navigate(typeof(CheckoutPage), retourItems);
                     break;
             }
             tbFocus.Focus(FocusState.Programmatic);
@@ -230,12 +191,12 @@ namespace kassasysteem
         public void UpdateOrderItems()
         {
             lvOrderItems.ItemsSource = OrderItems._orderItems;
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void tbSearch_GotFocus(object sender, RoutedEventArgs e)
         {
             tbSearch.Text = "";
-            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void tbSearch_LostFocus(object sender, RoutedEventArgs e)
@@ -244,8 +205,9 @@ namespace kassasysteem
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        private async void tbSearch_SelectionChanged(object sender, RoutedEventArgs e)
+        private async void tbSearch_KeyDown(object sender, KeyRoutedEventArgs e)
         {
+            // itemsource aanpassen
             switch (tbSearch.Text)
             {
                 case "Wat wilt u zoeken?":
@@ -253,26 +215,49 @@ namespace kassasysteem
                 case "":
                     return;
             }
+            if (e.Key != VirtualKey.Enter) return;
+            lvItems.Items?.Clear();
+            lvItemGroups.SelectedItem = null;
             List<Items> items;
+            var priceItems = new List<object>();
+            imgLoading.Visibility = Visibility.Visible;
             if (_selectedSearchOption == 1)
             {
                 items = await Rest.getItems("", tbSearch.Text);
-                lvItems.Items?.Clear();
                 foreach (var item in items)
                 {
-                    lvItems.Items?.Add(item);
+                    var salesPrice = await Rest.getItemPrice(item.ID);
+                    if (salesPrice == "")
+                    {
+                        salesPrice = "0";
+                    }
+                    item.SalesPrice = salesPrice;
+                    priceItems.Add(item);
+                }
+                foreach (var priceItem in priceItems)
+                {
+                    lvItems.Items?.Add(priceItem);
                 }
             }
             else if (_selectedSearchOption == 2)
             {
-                items = await Rest.getItems("", "", "", tbSearch.Text);
-                lvItems.Items?.Clear();
+                items = await Rest.getItems("", "", tbSearch.Text);
                 foreach (var item in items)
                 {
-                    lvItems.Items?.Add(item);
+                    var salesPrice = await Rest.getItemPrice(item.ID);
+                    if (salesPrice == "")
+                    {
+                        salesPrice = "0";
+                    }
+                    item.SalesPrice = salesPrice;
+                    priceItems.Add(item);
+                }
+                foreach (var priceItem in priceItems)
+                {
+                    lvItems.Items?.Add(priceItem);
                 }
             }
-            tbFocus.Focus(FocusState.Programmatic);
+            imgLoading.Visibility = Visibility.Collapsed;
         }
 
         private void tbtName_Click(object sender, RoutedEventArgs e)
@@ -291,36 +276,21 @@ namespace kassasysteem
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        private void tbFocus_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            // Zoek het item dat overeenkomt met de barcode en zet het in lvOrderItems en maak de textbox weer leeg
-        }
-
         private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
             _setFocus = false;
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void Button_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             _setFocus = true;
+            tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void btEntry_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(EntryPage));
-            /*var newView = CoreApplication.CreateNewView();
-            var newViewId = 0;
-            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                var frame = new Frame();
-                frame.Navigate(typeof(EntryPage), null);
-                Window.Current.Content = frame;
-                Window.Current.Activate();
-
-                newViewId = ApplicationView.GetForCurrentView().Id;
-            });
-            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);*/
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -328,6 +298,50 @@ namespace kassasysteem
             if (e.Parameter == null) return;
             _cassiereName = e.Parameter as string;
             if (_cassiereName != null) tbCassiereName.Text += " " + _cassiereName;
+            tbFocus.Focus(FocusState.Programmatic);
+        }
+
+        private void BtInleveren_OnClick(object sender, RoutedEventArgs e)
+        {
+            tbFocus.Focus(FocusState.Programmatic);
+        }
+
+        private async void tbFocus_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != VirtualKey.Enter) return;
+            var scannedNumber = tbFocus.Text;
+            tbFocus.Text = "";
+            var priceItems = new List<object>();
+            var items = await Rest.getItems("", "", scannedNumber);
+            foreach (var item in items)
+            {
+                var salesPrice = await Rest.getItemPrice(item.ID);
+                if (salesPrice == "")
+                {
+                    salesPrice = "0";
+                }
+                item.SalesPrice = salesPrice;
+                priceItems.Add(item);
+            }
+            foreach (Items item in priceItems)
+            {
+                var costPrice = float.Parse(item.SalesPrice, CultureInfo.InvariantCulture.NumberFormat);
+                _totalCost.Add(costPrice);
+                OrderItems._orderItems.Add(new OrderItems
+                {
+                    Description = item.Description,
+                    Amount = "1",
+                    CostPriceStandard = costPrice.ToString("C2")
+                });
+            }
+            lvOrderItems.ItemsSource = OrderItems._orderItems;
+            tbTotal.Text = _totalCost.Sum().ToString("c2");
+            tbFocus.Focus(FocusState.Programmatic);
+        }
+
+        private void tbClient_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+
         }
     }
 }
