@@ -73,7 +73,7 @@ namespace kassasysteem.Classes
             HttpResponseMessage respons = await client.GetAsync(request);
             if (respons.IsSuccessStatusCode == false)
             {
-                throw new ExactError("getItems Mislukt:  status = " + respons.StatusCode.ToString());
+                throw new ExactError("getItemPrice Mislukt:  status = " + respons.StatusCode.ToString());
             }
             respons.EnsureSuccessStatusCode();
             string responsecontent = await respons.Content.ReadAsStringAsync();
@@ -123,5 +123,36 @@ namespace kassasysteem.Classes
             return searchResults;
         }
 
+        public static async Task<List<Customer>> getCustomers(string f = "")
+        {
+            await OAuth.getAccess();
+
+            string filter = "&$filter=Type eq 'A'+and+Remarks eq '" + f + "'";
+            string select = "&$select=Name";
+            Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/crm/Accounts?access_token=" + OAuth.AccessToken + filter + select);
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+
+            HttpResponseMessage respons = await client.GetAsync(request);
+            if (respons.IsSuccessStatusCode == false)
+            {
+                throw new ExactError("getCustomers Mislukt:  status = " + respons.StatusCode.ToString());
+            }
+            respons.EnsureSuccessStatusCode();
+            string responsecontent = await respons.Content.ReadAsStringAsync();
+
+            JObject content = JObject.Parse(responsecontent);
+            IList<JToken> results = content["d"]["results"].Children().ToList();
+
+            List<Customer> searchResults = new List<Customer>();
+            foreach (JToken result in results)
+            {
+                searchResults.Add(JsonConvert.DeserializeObject<Customer>(result.ToString()));
+            }
+            return searchResults;
+        }
     }
 }

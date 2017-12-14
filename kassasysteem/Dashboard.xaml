@@ -34,8 +34,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
             <ColumnDefinition Width="100"></ColumnDefinition>
-            <ColumnDefinition Width="300"></ColumnDefinition>
-            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
@@ -123,7 +123,7 @@
             <TextBox x:Name="tbClient" Grid.Row="4" Grid.Column="1" BorderThickness="1,1,0,0" BorderBrush="Black" Padding="10,15,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" KeyDown="tbClient_KeyDown"></TextBox>
 
             <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="5" Grid.Column="0" BorderThickness="0,1,0,0" BorderBrush="Black">
-                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">Kortingspunten: 5</TextBlock>
+                <TextBlock x:Name="tbKorting" VerticalAlignment="Center" Margin="10,0,0,0">Kortingspunten: Voer de klant in</TextBlock>
             </ContentPresenter>
             <Button x:Name="btInleveren" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="YellowGreen" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" Click="BtInleveren_OnClick">Inleveren</Button>
 

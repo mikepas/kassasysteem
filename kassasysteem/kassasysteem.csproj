@@ -100,6 +100,7 @@
       <DependentUpon>CheckoutPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Constants.cs" />
+    <Compile Include="Classes\Customer.cs" />
     <Compile Include="Classes\Error.cs" />
     <Compile Include="Classes\ItemGroups.cs" />
     <Compile Include="Classes\Items.cs" />

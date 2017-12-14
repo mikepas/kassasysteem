@@ -5,69 +5,23 @@
     xmlns:local="using:kassasysteem"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d" FontSize="24">
 
-    <Grid Background="YellowGreen">
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <ListView Name="lvOrderItems" Grid.Row="0" Grid.Column="0" Grid.RowSpan="8" BorderThickness="0,0,0,1" BorderBrush="Black">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="{Binding Description}"/>
-                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding Amount}"/>
-                        <TextBlock Grid.Column="2" HorizontalAlignment="Center" Text="{Binding CostPriceStandard}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="YellowGreen" BorderThickness="0,0,0,1" BorderBrush="Black">
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Afrekenen</TextBlock>
+        </Border>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="32">Afrekenen</TextBlock>
-        
-        <TextBlock Grid.Column="0" Grid.Row="1" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">Bedrag ontvangen:</TextBlock>
-        <TextBox x:Name="tbContant" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Margin="50,0,0,0" Background="White"/>
-        
-        <TextBlock Grid.Column="0" Grid.Row="2" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">Wisselgeld:</TextBlock>
-        <TextBlock x:Name="tbWisselgeld" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,0,0" Text="$25,00"/>
-        
-        <TextBlock Grid.Column="0" Grid.Row="3" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">Klant code:</TextBlock>
-        <TextBox x:Name="tbClientCode" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Margin="50,0,0,0" Background="White"/>
-        
-        <TextBlock Grid.Column="0" Grid.Row="4" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">Kortingspunten:</TextBlock>
-        <TextBlock x:Name="tbKorting" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,0,0" Text="5"/>
-
-        <TextBlock Grid.Column="0" Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">Aantal kortingspunten inzetten:</TextBlock>
-        <TextBox x:Name="tbAmountKorting" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Margin="50,0,0,0" Background="White"/>
-
-        <TextBlock Grid.Column="0" Grid.Row="5" Width="200" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,50,0">Totaal aantal korting:</TextBlock>
-        <TextBox x:Name="tbTotalKorting" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Width="200" Margin="50,0,0,0" Background="White"/>
-
-        <TextBlock Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">$24,50</TextBlock>
-
-        <Button x:Name="btCheckOut" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Width="150" Height="30" Background="White" Content="Afrekenen"/>
+        <Button Grid.Column="0" Grid.Row="1" x:Name="btContant" Height="50" Width="200" HorizontalAlignment="Right" Margin="20" Background="YellowGreen" Click="BtContant_OnClick">Contant</Button>
+        <Button Grid.Column="1" Grid.Row="1" x:Name="btPinnen" Height="50" Width="200" HorizontalAlignment="Left" Margin="20" Background="YellowGreen" Click="BtPinnen_OnClick">Pinnen</Button>
     </Grid>
 </Page>

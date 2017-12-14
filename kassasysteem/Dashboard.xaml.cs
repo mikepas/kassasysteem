@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation;
 using Windows.Globalization;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Core;
+using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -34,7 +40,6 @@ namespace kassasysteem
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await SetItemGroups();
-            //await OpenCustomerPage();
         }
 
         private async Task SetItemGroups()
@@ -102,8 +107,7 @@ namespace kassasysteem
             var description = selectedItem.Description;
             var costPrice = float.Parse(selectedItem.SalesPrice, CultureInfo.InvariantCulture.NumberFormat);
             _totalCost.Add(costPrice);
-
-            // werkt nog niet
+            
             if (lvOrderItems.Items != null && lvOrderItems.Items.Contains(description))
             {
                 OrderItems._orderItems.Add(new OrderItems
@@ -149,18 +153,36 @@ namespace kassasysteem
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        private void btCheckOut_Click(object sender, RoutedEventArgs e)
+        private async void btCheckOut_Click(object sender, RoutedEventArgs e)
         {
-            // Laat een window zien met alle orderItems en of ze kortingspunten willen invoeren en laat ze kiezen tussen 'afrekenen' of 'annuleren'
             switch (_selectedSaleRetour)
             {
                 case 1:
+                    IsEnabled = false;
                     var salesItems = lvOrderItems.Items;
-                    Frame.Navigate(typeof(CheckoutPage), salesItems);
+                    var newView = CoreApplication.CreateNewView();
+                    var newViewId = 0;
+                    await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        var frame = new Frame();
+                        frame.Navigate(typeof(CheckoutPage), salesItems);
+                        Window.Current.Content = frame;
+                        Window.Current.Activate();
+
+                        newViewId = ApplicationView.GetForCurrentView().Id;
+                    });
+                    await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+                    Frame.Navigate(typeof(Dashboard));
                     break;
                 case 2:
-                    var retourItems = lvOrderItems.Items;
-                    Frame.Navigate(typeof(CheckoutPage), retourItems);
+                    IsEnabled = false;
+                    var messageDialog = new MessageDialog("Neem het product aan en geef " + _totalCost.Sum().ToString("c2") + " terug.", "Retour");
+                    await messageDialog.ShowAsync();
+
+                    //add SalesOrder
+                    //after succes show messageDialog
+
+                    Frame.Navigate(typeof(Dashboard));
                     break;
             }
             tbFocus.Focus(FocusState.Programmatic);
@@ -207,7 +229,6 @@ namespace kassasysteem
 
         private async void tbSearch_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            // itemsource aanpassen
             switch (tbSearch.Text)
             {
                 case "Wat wilt u zoeken?":
@@ -339,9 +360,18 @@ namespace kassasysteem
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        private void tbClient_KeyDown(object sender, KeyRoutedEventArgs e)
+        private async void tbClient_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-
+            if (tbClient.Text == "") tbKorting.Text = "Kortingspunten: Voer de klant in";
+            if (e.Key != VirtualKey.Enter) return;
+            tbFocus.Text = "";
+            var customers = await Rest.getCustomers(tbClient.Text);
+            foreach (var customer in customers)
+            {
+                tbClient.Text = customer.Name;
+            }
+            var kortingsPunten = "0";
+            tbKorting.Text = "Kortingspunten: " + kortingsPunten;
         }
     }
 }

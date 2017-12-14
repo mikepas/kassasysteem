@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -16,7 +18,18 @@ namespace kassasysteem
         {
             if (e.Parameter == null) return;
             _items = e.Parameter as List<object>;
+        }
 
+        private void BtContant_OnClick(object sender, RoutedEventArgs e)
+        {
+            //add SalesOrder
+            //show MessageDialog
+        }
+
+        private void BtPinnen_OnClick(object sender, RoutedEventArgs e)
+        {
+            //add SalesOrder
+            //show MessageDialog
         }
     }
 }
