@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
 using Windows.Globalization;
 using Windows.System;
 using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.Popups;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -34,6 +30,7 @@ namespace kassasysteem
             InitializeComponent();
             ApplicationLanguages.PrimaryLanguageOverride = "nl";
             tbTotal.Text = _totalCost.Sum().ToString("c2");
+            OrderItems._orderItems?.Clear();
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -56,27 +53,36 @@ namespace kassasysteem
         private async Task SetItems(string itemGroup)
         {
             var priceItems = new List<object>();
-            var items = await Rest.getItems(itemGroup);
-            if (lvItems.Items != null)
+            try
             {
-                lvItems.Items.Clear();
-                imgLoading.Visibility = Visibility.Visible;
-                foreach (var item in items)
+                var items = await Rest.getItems(itemGroup);
+                if (lvItems.Items != null)
                 {
-                    var salesPrice = await Rest.getItemPrice(item.ID);
-                    if (salesPrice == "")
+                    lvItems.Items.Clear();
+                    imgLoading.Visibility = Visibility.Visible;
+                    foreach (var item in items)
                     {
-                        salesPrice = "0";
+                        var salesPrice = await Rest.getItemPrice(item.ID);
+                        if (salesPrice == "")
+                        {
+                            salesPrice = "0";
+                        }
+                        item.SalesPrice = salesPrice;
+                        priceItems.Add(item);
                     }
-                    item.SalesPrice = salesPrice;
-                    priceItems.Add(item);
-                }
-                imgLoading.Visibility = Visibility.Collapsed;
-                foreach (var item in priceItems)
-                {
-                    lvItems.Items.Add(item);
+                    imgLoading.Visibility = Visibility.Collapsed;
+                    foreach (var item in priceItems)
+                    {
+                        lvItems.Items.Add(item);
+                    }
                 }
             }
+            catch (ExactError)
+            {
+                var messageDialog = new MessageDialog("Kon het item niet ophalen. \n\nProbeer het opnieuw.", "Mislukt!");
+                await messageDialog.ShowAsync();
+            }
+            
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -159,20 +165,8 @@ namespace kassasysteem
             {
                 case 1:
                     IsEnabled = false;
-                    var salesItems = lvOrderItems.Items;
-                    var newView = CoreApplication.CreateNewView();
-                    var newViewId = 0;
-                    await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        var frame = new Frame();
-                        frame.Navigate(typeof(CheckoutPage), salesItems);
-                        Window.Current.Content = frame;
-                        Window.Current.Activate();
-
-                        newViewId = ApplicationView.GetForCurrentView().Id;
-                    });
-                    await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-                    Frame.Navigate(typeof(Dashboard));
+                    //var salesItems = lvOrderItems.Items;
+                    Frame.Navigate(typeof(CheckoutPage), _totalCost.Sum().ToString("c2"));
                     break;
                 case 2:
                     IsEnabled = false;
@@ -360,16 +354,25 @@ namespace kassasysteem
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        private async void tbClient_KeyDown(object sender, KeyRoutedEventArgs e)
+        private async void tbClient_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            if (tbClient.Text == "") tbKorting.Text = "Kortingspunten: Voer de klant in";
+            //get kortingspunten
+            if (string.IsNullOrEmpty(tbClient.Text)) tbKorting.Text = "Kortingspunten: Voer de klant in";
             if (e.Key != VirtualKey.Enter) return;
             tbFocus.Text = "";
             var customers = await Rest.getCustomers(tbClient.Text);
+            var klantnaam = "";
             foreach (var customer in customers)
             {
-                tbClient.Text = customer.Name;
+                klantnaam = customer.Name;
             }
+            var messageDialog = new MessageDialog("Klant bestaat niet.");
+            if (string.IsNullOrEmpty(klantnaam))
+            {
+                await messageDialog.ShowAsync();
+                return;
+            }
+            tbClient.Text = klantnaam;
             var kortingsPunten = "0";
             tbKorting.Text = "Kortingspunten: " + kortingsPunten;
         }

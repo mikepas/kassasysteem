@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -8,7 +8,7 @@ namespace kassasysteem
 {
     public sealed partial class CheckoutPage : Page
     {
-        private List<object> _items = new List<object>();
+        private string _totalCost;
 
         public CheckoutPage()
         {
@@ -17,19 +17,29 @@ namespace kassasysteem
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter == null) return;
-            _items = e.Parameter as List<object>;
+            _totalCost = e.Parameter.ToString();
         }
 
-        private void BtContant_OnClick(object sender, RoutedEventArgs e)
+        private async void BtContant_OnClick(object sender, RoutedEventArgs e)
         {
             //add SalesOrder
-            //show MessageDialog
+            var messageDialog = new MessageDialog(_totalCost, "Contant betalen");
+            await messageDialog.ShowAsync();
+            var messageDialogBevestiging = new MessageDialog("Betaling afgerond!", "Bevestiging");
+            await messageDialogBevestiging.ShowAsync();
+            //print bon
+            Frame.Navigate(typeof(Dashboard));
         }
 
-        private void BtPinnen_OnClick(object sender, RoutedEventArgs e)
+        private async void BtPinnen_OnClick(object sender, RoutedEventArgs e)
         {
             //add SalesOrder
-            //show MessageDialog
+            var messageDialog = new MessageDialog(_totalCost, "Betalen via pin");
+            await messageDialog.ShowAsync();
+            var messageDialogBevestiging = new MessageDialog("Betaling afgerond!", "Bevestiging");
+            await messageDialogBevestiging.ShowAsync();
+            //print bon
+            Frame.Navigate(typeof(Dashboard));
         }
     }
 }
