@@ -110,6 +110,7 @@ namespace kassasysteem
         {
             var item = (ListView)sender;
             if (!(item.SelectedItem is Items selectedItem)) return;
+            item.SelectedItem = null;
             var description = selectedItem.Description;
             var costPrice = float.Parse(selectedItem.SalesPrice, CultureInfo.InvariantCulture.NumberFormat);
             _totalCost.Add(costPrice);

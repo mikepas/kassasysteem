@@ -57,7 +57,7 @@
         <TextBox x:Name="tbSearch" Text="Wat wilt u zoeken?" Padding="10,15,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered" PointerExited="Button_PointerExited" GotFocus="tbSearch_GotFocus" LostFocus="tbSearch_LostFocus" KeyDown="tbSearch_KeyDown"/>
         <Button x:Name="btExit" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="0,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btExit_Click">Afsluiten</Button>
         <Button x:Name="btEntry" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" BorderThickness="1,1,0,0" BorderBrush="Black" PointerEntered="UIElement_OnPointerEntered"  PointerExited="Button_PointerExited" Click="btEntry_Click">Uitloggen</Button>
-        <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black" Tapped="lvItems_Tapped"/>
+        <ListView x:Name="lvItems" Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Grid.ColumnSpan="2" BorderThickness="1,0,0,0" BorderBrush="Black" Tapped="lvItems_Tapped" IsTemplateFocusTarget="True"/>
         <Image x:Name="imgLoading" Source="https://m.popkey.co/fe4ba7/DYALX.gif" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Width="300" Height="300"></Image>
 
         <Grid Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="4" BorderThickness="1,0,0,0" BorderBrush="Black">
