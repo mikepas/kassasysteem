@@ -3,6 +3,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using kassasysteem.Classes;
 
 namespace kassasysteem
 {
@@ -27,7 +28,7 @@ namespace kassasysteem
             await messageDialog.ShowAsync();
             var messageDialogBevestiging = new MessageDialog("Betaling afgerond!", "Bevestiging");
             await messageDialogBevestiging.ShowAsync();
-            //print bon
+            CreatePrintPdf.CreateReceipt();
             Frame.Navigate(typeof(Dashboard));
         }
 
@@ -38,7 +39,7 @@ namespace kassasysteem
             await messageDialog.ShowAsync();
             var messageDialogBevestiging = new MessageDialog("Betaling afgerond!", "Bevestiging");
             await messageDialogBevestiging.ShowAsync();
-            //print bon
+            CreatePrintPdf.CreateReceipt();
             Frame.Navigate(typeof(Dashboard));
         }
     }
