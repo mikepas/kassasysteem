@@ -128,7 +128,7 @@ namespace kassasysteem.Classes
             await OAuth.getAccess();
 
             string filter = "&$filter=Type eq 'A'+and+Remarks eq '" + f + "'";
-            string select = "&$select=Name";
+            string select = "&$select=Name,Phone";
             Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/crm/Accounts?access_token=" + OAuth.AccessToken + filter + select);
 
             HttpClient client = new HttpClient();

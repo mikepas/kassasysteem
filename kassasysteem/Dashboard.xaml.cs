@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Globalization;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Popups;
@@ -14,6 +17,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using kassasysteem.Classes;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
 
 namespace kassasysteem
 {
@@ -24,6 +29,8 @@ namespace kassasysteem
         private int _selectedSearchOption = 1;
         private int _selectedSaleRetour = 1;
         private string _cassiereName = "";
+        private bool _koringIngeleverd;
+        private string _kortingspunten = "0";
 
         public Dashboard()
         {
@@ -79,10 +86,11 @@ namespace kassasysteem
             }
             catch (ExactError)
             {
-                var messageDialog = new MessageDialog("Kon het item niet ophalen. \n\nProbeer het opnieuw.", "Mislukt!");
+                var messageDialog =
+                    new MessageDialog("Kon het item niet ophalen. \n\nProbeer het opnieuw.", "Mislukt!");
                 await messageDialog.ShowAsync();
             }
-            
+
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -101,20 +109,20 @@ namespace kassasysteem
 
         private async void lvItemGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListView lv = (ListView)sender;
+            ListView lv = (ListView) sender;
             if (lv.SelectedItem != null) await SetItems(lv.SelectedItem.ToString());
             tbFocus.Focus(FocusState.Programmatic);
         }
 
         private void lvItems_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            var item = (ListView)sender;
+            var item = (ListView) sender;
             if (!(item.SelectedItem is Items selectedItem)) return;
             item.SelectedItem = null;
             var description = selectedItem.Description;
             var costPrice = float.Parse(selectedItem.SalesPrice, CultureInfo.InvariantCulture.NumberFormat);
             _totalCost.Add(costPrice);
-            
+
             if (lvOrderItems.Items != null && lvOrderItems.Items.Contains(description))
             {
                 OrderItems._orderItems.Add(new OrderItems
@@ -129,7 +137,7 @@ namespace kassasysteem
                 OrderItems._orderItems.Add(new OrderItems
                 {
                     Description = description,
-                    Amount = "1", 
+                    Amount = "1",
                     CostPriceStandard = costPrice.ToString("C2")
                 });
             }
@@ -150,8 +158,14 @@ namespace kassasysteem
             {
                 if (lvOrderItems.SelectedItem is OrderItems orderItem)
                 {
-                    orderItem.CostPriceStandard = "-" + orderItem.CostPriceStandard.Replace("€ ", "").Replace(",00", "");
-                    var costPrice = float.Parse(orderItem.CostPriceStandard, CultureInfo.InvariantCulture.NumberFormat);
+                    if (orderItem.Description == "Korting") _koringIngeleverd = false;
+                    var costPriceStandard = "-" + orderItem.CostPriceStandard.Replace("€ ", "").Replace(",00", "");
+                    var replaceCostPriceStandard = costPriceStandard;
+                    if (costPriceStandard.Contains("--"))
+                    {
+                        replaceCostPriceStandard = costPriceStandard.Replace("--", "").Replace(",", ".");
+                    }
+                    var costPrice = float.Parse(replaceCostPriceStandard, CultureInfo.InvariantCulture.NumberFormat);
                     _totalCost.Add(costPrice);
                     OrderItems._orderItems?.Remove(orderItem);
                 }
@@ -162,6 +176,7 @@ namespace kassasysteem
 
         private async void btCheckOut_Click(object sender, RoutedEventArgs e)
         {
+            CreateReceipt();
             switch (_selectedSaleRetour)
             {
                 case 1:
@@ -171,7 +186,9 @@ namespace kassasysteem
                     break;
                 case 2:
                     IsEnabled = false;
-                    var messageDialog = new MessageDialog("Neem het product aan en geef " + _totalCost.Sum().ToString("c2") + " terug.", "Retour");
+                    var messageDialog =
+                        new MessageDialog("Neem het product aan en geef " + _totalCost.Sum().ToString("c2") + " terug.",
+                            "Retour");
                     await messageDialog.ShowAsync();
 
                     //add SalesOrder
@@ -317,8 +334,32 @@ namespace kassasysteem
             tbFocus.Focus(FocusState.Programmatic);
         }
 
-        private void BtInleveren_OnClick(object sender, RoutedEventArgs e)
+        private async void BtInleveren_OnClick(object sender, RoutedEventArgs e)
         {
+            MessageDialog messageDialog1 = new MessageDialog("Kortingspunten zijn al ingeleverd.", "Ingeleverd");
+            MessageDialog messageDialog2 = new MessageDialog("Er zijn geen kortingspunten.", "Inleveren");
+            if (string.IsNullOrEmpty(_kortingspunten) || _kortingspunten == "0")
+            {
+                await messageDialog2.ShowAsync();
+                return;
+            }
+            if (_koringIngeleverd)
+            {
+                await messageDialog1.ShowAsync();
+                return;
+            }
+            var totaalDecimal = Convert.ToDecimal("-" + _kortingspunten) * 10 / 100;
+            var totaalFloat = float.Parse("-" + _kortingspunten, CultureInfo.InvariantCulture.NumberFormat);
+            OrderItems._orderItems.Add(new OrderItems
+            {
+                Description = "Korting",
+                Amount = "5",
+                CostPriceStandard = totaalDecimal.ToString("C2")
+            });
+            _totalCost.Add(totaalFloat / 10);
+            tbTotal.Text = _totalCost.Sum().ToString("C2");
+            lvOrderItems.ItemsSource = OrderItems._orderItems;
+            _koringIngeleverd = true;
             tbFocus.Focus(FocusState.Programmatic);
         }
 
@@ -351,13 +392,12 @@ namespace kassasysteem
                 });
             }
             lvOrderItems.ItemsSource = OrderItems._orderItems;
-            tbTotal.Text = _totalCost.Sum().ToString("c2");
+            tbTotal.Text = _totalCost.Sum().ToString("C2");
             tbFocus.Focus(FocusState.Programmatic);
         }
 
         private async void tbClient_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            //get kortingspunten
             if (string.IsNullOrEmpty(tbClient.Text)) tbKorting.Text = "Kortingspunten: Voer de klant in";
             if (e.Key != VirtualKey.Enter) return;
             tbFocus.Text = "";
@@ -366,6 +406,7 @@ namespace kassasysteem
             foreach (var customer in customers)
             {
                 klantnaam = customer.Name;
+                _kortingspunten = customer.Phone;
             }
             var messageDialog = new MessageDialog("Klant bestaat niet.");
             if (string.IsNullOrEmpty(klantnaam))
@@ -374,8 +415,47 @@ namespace kassasysteem
                 return;
             }
             tbClient.Text = klantnaam;
-            var kortingsPunten = "0";
-            tbKorting.Text = "Kortingspunten: " + kortingsPunten;
+            tbKorting.Text = "Kortingspunten: " + _kortingspunten;
+        }
+
+        private static void CreateReceipt()
+        {
+            var document = new PdfDocument();
+            var page = document.Pages.Add();
+            var font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
+            page.Graphics.DrawString("Receipt 1", font, PdfBrushes.Black, 10, 10);
+            var stream = new MemoryStream();
+            document.Save(stream);
+            document.Close(true);
+            Save(stream, "Result.pdf");
+        }
+
+        private static async void Save(Stream stream, string filename)
+        {
+            stream.Position = 0;
+            StorageFile stFile;
+            if (!Windows.Foundation.Metadata.ApiInformation.IsTypePresent($"Windows.Phone.UI.Input.HardwareButtons"))
+            {
+                var savePicker = new FileSavePicker
+                {
+                    DefaultFileExtension = ".pdf",
+                    SuggestedFileName = "receipt"
+                };
+                savePicker.FileTypeChoices.Add("Adobe PDF Document", new List<string>() {".pdf"});
+                stFile = await savePicker.PickSaveFileAsync();
+            }
+            else
+            {
+                var local = ApplicationData.Current.LocalFolder;
+                stFile = await local.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+            }
+            if (stFile == null) return;
+            var fileStream = await stFile.OpenAsync(FileAccessMode.ReadWrite);
+            var st = fileStream.AsStreamForWrite();
+            st.Write((stream as MemoryStream)?.ToArray(), 0, (int) stream.Length);
+            st.Flush();
+            st.Dispose();
+            fileStream.Dispose();
         }
     }
 }
