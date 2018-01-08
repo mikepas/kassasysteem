@@ -89,6 +89,37 @@ namespace kassasysteem.Classes
             }
             return searchResults;
         }
+            
+        public static async Task<String> getStock(string id = "")
+        {
+            await OAuth.getAccess();
+            string select = "&$select=QuantityInStock";
+            Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/read/inventory/StockCountLines?access_token=" + OAuth.AccessToken + "&filter=ID eq guid'" + id + "'" + select);
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+
+            HttpResponseMessage respons = await client.GetAsync(request);
+            if (respons.IsSuccessStatusCode == false)
+            {
+                throw new ExactError("getItemPrice Mislukt:  status = " + respons.StatusCode);
+            }
+            respons.EnsureSuccessStatusCode();
+            string responsecontent = await respons.Content.ReadAsStringAsync();
+
+            JObject content = JObject.Parse(responsecontent);
+            IList<JToken> results = content["d"]["results"].Children().ToList();
+
+            var searchResults = "";
+            foreach (JToken result in results)
+            {
+                Items searchResult = JsonConvert.DeserializeObject<Items>(result.ToString());
+                searchResults = searchResult.SalesPrice;
+            }
+            return searchResults;
+        }
 
         public static async Task<List<ItemGroups>> getItemGroups(string f = "")
         {
@@ -153,6 +184,23 @@ namespace kassasysteem.Classes
                 searchResults.Add(JsonConvert.DeserializeObject<Customer>(result.ToString()));
             }
             return searchResults;
+        }
+
+        public static async Task UpdateKorting(string id)
+        {
+            await OAuth.getAccess();
+            Uri request = new Uri(Constants.BASE_URI + "/api/v1/" + OAuth.CurrentDivision + "/financial/GLAccounts(guid\'" + id + "\')?access_token=" + OAuth.AccessToken);
+            HttpClient client = new HttpClient();
+
+            string bodystring = JsonConvert.SerializeObject(id);
+            StringContent content = new StringContent(bodystring, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage respons = await client.PutAsync(request, content);
+
+            if (respons.IsSuccessStatusCode == false)
+            {
+                throw new ExactError("updateGLAccount Mislukt:  status = " + respons.StatusCode.ToString());
+            }
+            respons.EnsureSuccessStatusCode();
         }
     }
 }

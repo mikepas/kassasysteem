@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 
@@ -14,8 +15,8 @@ namespace kassasysteem.Classes
         {
             var document = new PdfDocument();
             var page = document.Pages.Add();
-            var font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
-            page.Graphics.DrawString("Receipt 1", font, PdfBrushes.Black, 10, 10);
+            page.Graphics.DrawString("Groene Vingers", new PdfStandardFont(PdfFontFamily.TimesRoman, 32), PdfBrushes.YellowGreen, 10, 10);
+            page.Graphics.DrawString("", new PdfStandardFont(PdfFontFamily.TimesRoman, 12), PdfBrushes.Black, 10,10);
             var stream = new MemoryStream();
             document.Save(stream);
             document.Close(true);

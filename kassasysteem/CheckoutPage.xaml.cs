@@ -15,23 +15,21 @@ namespace kassasysteem
         {
             InitializeComponent();
         }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter == null) return;
             _totalCost = e.Parameter.ToString();
         }
 
-        private async void BtContant_OnClick(object sender, RoutedEventArgs e)
+        private void BtContant_OnClick(object sender, RoutedEventArgs e)
         {
             //add SalesOrder
-            var messageDialog = new MessageDialog(_totalCost, "Contant betalen");
-            await messageDialog.ShowAsync();
-            var messageDialogBevestiging = new MessageDialog("Betaling afgerond!", "Bevestiging");
-            await messageDialogBevestiging.ShowAsync();
-            CreatePrintPdf.CreateReceipt();
-            Frame.Navigate(typeof(Dashboard));
+            //var messageDialog = new MessageDialog("Totaal: " + _totalCost, "Contant betalen");
+            //await messageDialog.ShowAsync();
+            Frame.Navigate(typeof(ContantPage), _totalCost);
         }
-
+        
         private async void BtPinnen_OnClick(object sender, RoutedEventArgs e)
         {
             //add SalesOrder

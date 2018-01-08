@@ -64,6 +64,7 @@ namespace kassasysteem
                     imgLoading.Visibility = Visibility.Visible;
                     foreach (var item in items)
                     {
+                        //var stock = await Rest.getStock(item.ID);
                         var salesPrice = await Rest.getItemPrice(item.ID);
                         if (salesPrice == "")
                         {
