@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml.Controls;
+using kassasysteem.Classes;
 
 namespace kassasysteem
 {
@@ -10,7 +8,7 @@ namespace kassasysteem
         public CustomerPage()
         {
             InitializeComponent();
-            lvOrderItems.ItemsSource = Classes.OrderItems._orderItems;
+            //lvOrderItems.ItemsSource = OrderItems._orderItems;
         }
     }
 }
