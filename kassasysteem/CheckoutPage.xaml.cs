@@ -37,7 +37,7 @@ namespace kassasysteem
             await messageDialog.ShowAsync();
             var messageDialogBevestiging = new MessageDialog("Betaling afgerond!", "Bevestiging");
             await messageDialogBevestiging.ShowAsync();
-            CreatePrintPdf.CreateReceipt();
+            CreatePrintPdf.CreateReceipt(Dashboard._cassiereName, Dashboard._number);
             Frame.Navigate(typeof(Dashboard));
         }
     }

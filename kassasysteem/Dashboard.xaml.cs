@@ -23,7 +23,8 @@ namespace kassasysteem
         private readonly List<float> _totalCost = new List<float>();
         private int _selectedSearchOption = 1;
         private int _selectedSaleRetour = 1;
-        private string _cassiereName = "";
+        public static string _cassiereName = "";
+        public static int _number;
         private bool _koringIngeleverd;
         private string _kortingspunten = "0";
 
@@ -33,6 +34,7 @@ namespace kassasysteem
             ApplicationLanguages.PrimaryLanguageOverride = "nl";
             tbTotal.Text = _totalCost.Sum().ToString("c2");
             OrderItems._orderItems?.Clear();
+            _number++;
             tbFocus.Focus(FocusState.Programmatic);
         }
 

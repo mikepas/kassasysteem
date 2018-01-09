@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.UI.Xaml.Controls;
 using kassasysteem.Classes;
 
 namespace kassasysteem
